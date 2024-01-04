@@ -1,1 +1,1 @@
-# Blog-App-react
+# Blog-App-Mern-Stack
