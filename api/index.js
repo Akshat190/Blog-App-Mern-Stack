@@ -21,6 +21,10 @@ app.use('/uploads', express.static(__dirname + '/uploads'));
 
 mongoose.connect('mongodb+srv://etheriummercedes:PJhqtE9wO7aisPCV@cluster0.c31oess.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0');
 
+app.get("/", (req,res) => {
+  res.json("Hello");
+})
+
 app.post('/register', async (req,res) => {
   const {username,password} = req.body;
   try{
