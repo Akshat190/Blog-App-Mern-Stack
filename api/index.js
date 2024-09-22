@@ -14,16 +14,15 @@ const fs = require('fs');
 const salt = bcrypt.genSaltSync(10);
 const secret = 'asdfe45we45w345wegw345werjktjwertkj';
 
-app.use(cors({credentials:true,origin:'http://localhost:3000',methods:["POST","GET"]}));
+app.use(cors({credentials:true,
+              origin:'http://localhost:3000',
+              methods:["POST","GET"]
+            }));
 app.use(express.json());
 app.use(cookieParser());
 app.use('/uploads', express.static(__dirname + '/uploads'));
 
 mongoose.connect('mongodb+srv://etheriummercedes:PJhqtE9wO7aisPCV@cluster0.c31oess.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0');
-
-app.get("/", (req,res) => {
-  res.json("Hello");
-})
 
 app.post('/register', async (req,res) => {
   const {username,password} = req.body;
@@ -57,13 +56,16 @@ app.post('/login', async (req,res) => {
   }
 });
 
-app.get('/profile', (req,res) => {
-  const {token} = req.cookies;
-  jwt.verify(token, secret, {}, (err,info) => {
-    if (err) throw err;
+app.get('/profile', (req, res) => {
+  const { token } = req.cookies;
+  if (!token) return res.status(401).json('No token provided');
+
+  jwt.verify(token, secret, {}, (err, info) => {
+    if (err) return res.status(403).json('Invalid token');
     res.json(info);
   });
 });
+
 
 app.post('/logout', (req,res) => {
   res.cookie('token', '').json('ok');
